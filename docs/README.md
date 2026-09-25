@@ -144,4 +144,4 @@ Last.fm may ignore some scrobbles depending on its own rules. The script reports
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](../LICENSE).
