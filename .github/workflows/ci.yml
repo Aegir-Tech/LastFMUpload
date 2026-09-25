@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $failed = @()
+          foreach ($test in Get-ChildItem tests -Filter *.tests.ps1) {
+            Write-Host "Running $($test.Name)"
+            pwsh -NoProfile -NonInteractive -File $test.FullName
+            if ($LASTEXITCODE -ne 0) { $failed += $test.Name }
+          }
+          if ($failed.Count -gt 0) {
+            throw "Failed: $($failed -join ', ')"
+          }
